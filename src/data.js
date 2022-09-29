@@ -6,8 +6,10 @@ export const stripeData = {
 };
 
 export const parseNixtlaData = (nixtla) => {
+  const timestamp = nixtla['timestamp'].map(x => x.split(' ')[0]);
+
   return {
-    timestamp: nixtla['timestamp'],
+    timestamp: timestamp,
     value: nixtla['value'],
   };
 };

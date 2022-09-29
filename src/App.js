@@ -83,6 +83,7 @@ const chartData = {
 
 const makeForecast = async (data, chartRef) => {
   const fcast = await forecast(data);
+  console.log('got response', fcast);
   const parsedData = Data.parseNixtlaData(fcast);
 
   const chart = chartRef.current;
@@ -106,7 +107,7 @@ function App() {
         </Row>
         <Row>
           <Col>
-            <Button onClick={() => makeForecast(chartData, chartRef)}>Forecast!!</Button>
+            <Button onClick={() => makeForecast(Data.stripeData, chartRef)}>Forecast!!</Button>
           </Col>
         </Row>
       </Container>

@@ -8,27 +8,28 @@ const bearerToken = process.env.REACT_APP_NIXTLA_BEARER_TOKEN;
 async function forecast(data) {
   const body = {
     fh: 7,
-    timestamp: Object.keys(data),
-    value: Object.values(data),
+    timestamp: data.timestamp,
+    value: data.value,
     seasonality: 1,
     cv: false,
   }
+  console.log('body', JSON.stringify(body));
 
   const response = await fetch(`${nixtlaURL}/forecast`,
     {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${bearerToken}`,
+        'accept': 'application/json',
+        'authorization': `Bearer ${bearerToken}`,
+        'content-type': 'application/json',
       },
       body: JSON.stringify(body),
-      mode: 'no-cors',
+      mode: 'cors',
     }
   );
 
   const responseData = await response.json();
-  console.log(responseData)
+  console.log('response', responseData);
 
   return responseData;
 }
