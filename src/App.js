@@ -11,6 +11,9 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { forecast } from './nixtla';
+import * as Utils from './utils';
+import * as Data from './data';
 
 ChartJS.register(
   CategoryScale,
@@ -47,28 +50,26 @@ export const chartOpts = {
   },
 };
 
-const chartLabels = ['January', 'February', 'March', 'April'];
-
-const dashLastLine = (ctx, data) => {
-  if (ctx.p1DataIndex == data.length - 1) {
+const dashLastLine = (ctx, size) => {
+  if (ctx.p1DataIndex == size - 1) {
     return [6, 6];
   } else {
     return undefined;
   }
 }
 
-const stripeData = [200, 290, 640, 550];
+const chartLabels = Utils.months({ count: Object.keys(Data.stripeData).length });
 
-export const chartData = {
+const chartData = {
   labels: chartLabels,
   datasets: [
     {
       label: 'Stripe',
-      data: stripeData,
+      data: Object.values(Data.stripeData),
       borderColor: 'rgb(255, 99, 132)',
       backgroundColor: 'rgba(255, 99, 132, 0.5)',
       segment: {
-        borderDash: ctx => dashLastLine(ctx, stripeData),
+        borderDash: ctx => dashLastLine(ctx, Object.keys(Data.stripeData).length),
       },
     },
     {
@@ -77,11 +78,13 @@ export const chartData = {
       borderColor: 'rgb(53, 162, 235)',
       backgroundColor: 'rgba(53, 162, 235, 0.5)',
       segment: {
-        borderDash: ctx => dashLastLine(ctx, stripeData),
+        borderDash: ctx => dashLastLine(ctx, Object.keys(Data.stripeData).length),
       },
     },
   ],
 };
+
+forecast(Data.stripeData);
 
 
 function App() {
