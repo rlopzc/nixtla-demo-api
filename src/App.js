@@ -1,5 +1,5 @@
 import './App.css';
-import { Navbar, Container, Row, Col } from 'react-bootstrap';
+import { Navbar, Container, Row, Col, Button } from 'react-bootstrap';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,6 +14,7 @@ import { Line } from 'react-chartjs-2';
 import { forecast } from './nixtla';
 import * as Utils from './utils';
 import * as Data from './data';
+import { useRef } from 'react';
 
 ChartJS.register(
   CategoryScale,
@@ -58,43 +59,54 @@ const dashLastLine = (ctx, size) => {
   }
 }
 
-const chartLabels = Utils.months({ count: Object.keys(Data.stripeData).length });
+const chartLabels = Utils.months({ count: Data.stripeData.timestamp.length });
 
 const chartData = {
   labels: chartLabels,
   datasets: [
     {
       label: 'Stripe',
-      data: Object.values(Data.stripeData),
+      data: Data.stripeData.value,
       borderColor: 'rgb(255, 99, 132)',
       backgroundColor: 'rgba(255, 99, 132, 0.5)',
       segment: {
-        borderDash: ctx => dashLastLine(ctx, Object.keys(Data.stripeData).length),
-      },
-    },
-    {
-      label: 'Whatsapp',
-      data: [250, 650, 420, 830],
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      segment: {
-        borderDash: ctx => dashLastLine(ctx, Object.keys(Data.stripeData).length),
+        borderDash: ctx => {
+          const idx = ctx.p0DataIndex;
+          if (idx >= Data.stripeData.timestamp.length) {
+            return [6 ,6];
+          }
+        },
       },
     },
   ],
 };
 
-forecast(Data.stripeData);
+const makeForecast = async (data, chartRef) => {
+  const fcast = await forecast(data);
+  const parsedData = Data.parseNixtlaData(fcast);
 
+  const chart = chartRef.current;
+  chart.data.labels = [ ...data.timestamp, ...parsedData.timestamp ]
+  chart.data.datasets[0].data = [ ...chart.data.datasets[0].data, ...parsedData.value ];
+
+  chart.update();
+};
 
 function App() {
+  const chartRef = useRef();
+
   return (
     <div>
       <Nav></Nav>
       <Container>
         <Row>
           <Col md={12}>
-            <Line options={chartOpts} data={chartData} />
+            <Line ref={chartRef} options={chartOpts} data={chartData} />
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button onClick={() => makeForecast(chartData, chartRef)}>Forecast!!</Button>
           </Col>
         </Row>
       </Container>

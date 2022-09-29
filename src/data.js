@@ -1,7 +1,13 @@
+import _ from 'underscore';
+
 export const stripeData = {
-  '2022-01-01': 200,
-  '2022-02-01': 290,
-  '2022-03-01': 640,
-  '2022-04-01': 550,
-  '2022-05-01': 735,
+  timestamp: [ '2022-01-01', '2022-02-01', '2022-03-01', '2022-04-01', '2022-05-01' ],
+  value: [ 200, 290, 640, 550, 735]
+};
+
+export const parseNixtlaData = (nixtla) => {
+  return {
+    timestamp: nixtla['timestamp'],
+    value: nixtla['value'],
+  };
 };

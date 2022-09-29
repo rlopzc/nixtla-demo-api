@@ -22,7 +22,8 @@ async function forecast(data) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${bearerToken}`,
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
+      mode: 'no-cors',
     }
   );
 
