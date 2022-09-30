@@ -14,7 +14,6 @@ async function forecast(data) {
     model: 'arima',
     cv: false,
   }
-  console.log('body', JSON.stringify(body));
 
   const response = await fetch(`${nixtlaURL}/forecast`,
     {
@@ -30,7 +29,6 @@ async function forecast(data) {
   );
 
   const responseData = await response.json();
-  console.log('response', responseData);
 
   return responseData;
 }

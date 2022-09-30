@@ -42,11 +42,7 @@ export const chartOpts = {
   responsive: true,
   plugins: {
     legend: {
-      position: 'top',
-    },
-    title: {
-      display: true,
-      text: 'Webhooks Forecast',
+      display: false,
     },
   },
 };
@@ -94,7 +90,6 @@ const chartData = {
 
 const makeForecast = async (data, chartRef) => {
   const fcast = await forecast(data);
-  console.log('got response', fcast);
   const parsedData = Data.parseNixtlaData(fcast);
 
   const chart = chartRef.current;
@@ -111,14 +106,18 @@ function App() {
     <div>
       <Nav></Nav>
       <Container>
-        <Row>
+        <h1 className='text-center'>Peyton Manning visits on Wikipedia</h1>
+
+        <Row className='mt-3'>
           <Col md={12}>
+            <h2 className='text-center'>Forecasting</h2>
             <Line ref={chartRef} options={chartOpts} data={chartData} />
+            <Button className='mt-2 w-100' onClick={() => makeForecast(Data.stripeData, chartRef)}>Forecast Data</Button>
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <Button onClick={() => makeForecast(Data.stripeData, chartRef)}>Forecast!!</Button>
+        <Row className='mt-3'>
+          <Col md={12}>
+            <h2 className='text-center'>Anomaly Detection</h2>
           </Col>
         </Row>
       </Container>
