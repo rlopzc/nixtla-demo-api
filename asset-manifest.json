@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.c9543ada.css",
-    "main.js": "/static/js/main.82635d0e.js",
-    "static/js/787.50aefd38.chunk.js": "/static/js/787.50aefd38.chunk.js",
-    "index.html": "/index.html",
-    "main.c9543ada.css.map": "/static/css/main.c9543ada.css.map",
-    "main.82635d0e.js.map": "/static/js/main.82635d0e.js.map",
-    "787.50aefd38.chunk.js.map": "/static/js/787.50aefd38.chunk.js.map"
+    "main.css": "/nixtla-demo-api/static/css/main.c9543ada.css",
+    "main.js": "/nixtla-demo-api/static/js/main.a5e38d3b.js",
+    "static/js/787.50aefd38.chunk.js": "/nixtla-demo-api/static/js/787.50aefd38.chunk.js",
+    "index.html": "/nixtla-demo-api/index.html",
+    "main.c9543ada.css.map": "/nixtla-demo-api/static/css/main.c9543ada.css.map",
+    "main.a5e38d3b.js.map": "/nixtla-demo-api/static/js/main.a5e38d3b.js.map",
+    "787.50aefd38.chunk.js.map": "/nixtla-demo-api/static/js/787.50aefd38.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.c9543ada.css",
-    "static/js/main.82635d0e.js"
+    "static/js/main.a5e38d3b.js"
   ]
 }
