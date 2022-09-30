@@ -8,11 +8,11 @@ We are going to use the following dataset:
 [Peyton Manning wikipedia visits dataset](/manning.json).
 
 This is the plotted data before using Nixtla.
-![Peyton before](/peyton-before.png)
+![Peyton before](/peyton-before1.png)
 
 **And this is the updated chart with Forecasting (blue) and anomalies detected (yellow dots).**
 
-![Peyton after](/peyton-after.png)
+![Peyton after](/peyton-after1.png)
 
 Let's get started!
 
