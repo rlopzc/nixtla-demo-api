@@ -7,10 +7,11 @@ const bearerToken = process.env.REACT_APP_NIXTLA_BEARER_TOKEN;
 
 async function forecast(data) {
   const body = {
-    fh: 7,
+    fh: 12,
     timestamp: data.timestamp,
     value: data.value,
-    seasonality: 1,
+    seasonality: 12,
+    model: 'arima',
     cv: false,
   }
   console.log('body', JSON.stringify(body));

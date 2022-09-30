@@ -65,15 +65,26 @@ const chartData = {
   labels: chartLabels,
   datasets: [
     {
-      label: 'Stripe',
+      label: 'Manning',
       data: Data.stripeData.value,
       borderColor: 'rgb(255, 99, 132)',
       backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      elements: {
+        point:{
+            radius: 0
+        }
+      },
       segment: {
+        borderColor: ctx => {
+          const idx = ctx.p0DataIndex;
+          if (idx >= Data.stripeData.timestamp.length) {
+            return 'blue';
+          }
+        },
         borderDash: ctx => {
           const idx = ctx.p0DataIndex;
           if (idx >= Data.stripeData.timestamp.length) {
-            return [6 ,6];
+            return [6];
           }
         },
       },
