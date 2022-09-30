@@ -14,6 +14,8 @@ This is the plotted data before using Nixtla.
 
 ![Peyton after](/peyton-after.png)
 
+Let's get started!
+
 ## Integrating Nixtla with your application
 
 ### Nixtla Auth token
