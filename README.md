@@ -1,6 +1,82 @@
-# Getting Started with Create React App
+# Getting Started with Nixtla!
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[Nixtla](https://docs.nixtla.io/) is a Time Series Forecasting and Anomaly Detection For Developers.
+
+We will use Nixtla to forecast and detect anomalies in our dataset.
+
+## Integrating Nixtla with your application
+
+### Nixtla Auth token
+
+All nixtla requests need a bearer token which can be obtained [here](http://18.235.133.135:3000/login).
+
+### Nixtla Forecasting and Anomaly Detection API functions
+
+The code assumes that your data object contains `data.timestamp` and `data.value` as properties.
+You will also need to adjust the following params: `fh, seasonality, model, cv, and level`. You can find the documentation for this params here:
+[Forecast](https://docs.nixtla.io/reference/forecast_forecast_post)
+[Anomaly Detection](https://docs.nixtla.io/reference/anomaly_detector_anomaly_detector_post)
+
+```js
+// nixtla.js
+
+const nixtlaURL = 'http://app.nixtla.io';
+const bearerToken = process.env.REACT_APP_NIXTLA_BEARER_TOKEN;
+const headers = {
+  'accept': 'application/json',
+  'authorization': \`Bearer \${bearerToken}\`,
+  'content-type': 'application/json',
+};
+
+async function forecast(data) {
+  const body = {
+    timestamp: data.timestamp,
+    value: data.value,
+    fh: 12,
+    seasonality: 12,
+    model: 'arima',
+    cv: false,
+  }
+
+  const response = await fetch(\`\${nixtlaURL}/forecast\`, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(body),
+  });
+
+  const responseData = await response.json();
+
+  return responseData;
+}
+
+async function anomalyDetection(data) {
+  const body = {
+    timestamp: data.timestamp,
+    value: data.value,
+    level: 90,
+    seasonality: 1,
+    fh: 12,
+  }
+
+  const response = await fetch(\`\${nixtlaURL}/anomaly_detector\`, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(body),
+  })
+
+  const responseData = await response.json();
+
+  return responseData;
+}
+
+export {
+  forecast, anomalyDetection
+};
+```
+
+### Using Nixtla API functions
+
+### Add Nixtla data to your chart
 
 ## Available Scripts
 
@@ -13,58 +89,3 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
