@@ -47,18 +47,8 @@ export const chartOpts = {
   },
 };
 
-const dashLastLine = (ctx, size) => {
-  if (ctx.p1DataIndex == size - 1) {
-    return [6, 6];
-  } else {
-    return undefined;
-  }
-}
-
-const chartLabels = Utils.months({ count: Data.manningData.timestamp.length });
-
 const chartData = {
-  labels: chartLabels,
+  labels: Data.manningData.timestamp,
   datasets: [
     {
       label: 'Manning',
