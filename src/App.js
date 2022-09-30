@@ -116,12 +116,67 @@ const detectAnomalies = async (data, chartRef) => {
   chart.update();
 }
 
+const nixtlaHttpCodeSnippet = `// nixtla.js
+
+const nixtlaURL = 'http://app.nixtla.io';
+const bearerToken = process.env.REACT_APP_NIXTLA_BEARER_TOKEN;
+const headers = {
+  'accept': 'application/json',
+  'authorization': \`Bearer \${bearerToken}\`,
+  'content-type': 'application/json',
+};
+
+async function forecast(data) {
+  const body = {
+    timestamp: data.timestamp,
+    value: data.value,
+    fh: 12,
+    seasonality: 12,
+    model: 'arima',
+    cv: false,
+  }
+
+  const response = await fetch(\`\${nixtlaURL}/forecast\`, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(body),
+  });
+
+  const responseData = await response.json();
+
+  return responseData;
+}
+
+async function anomalyDetection(data) {
+  const body = {
+    timestamp: data.timestamp,
+    value: data.value,
+    level: 90,
+    seasonality: 1,
+    fh: 12,
+  }
+
+  const response = await fetch(\`\${nixtlaURL}/anomaly_detector\`, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(body),
+  })
+
+  const responseData = await response.json();
+
+  return responseData;
+}
+
+export {
+  forecast, anomalyDetection
+};
+`;
+
 function App() {
   const chartRef = useRef();
 
   return (
     <div>
-      <Nav></Nav>
       <Container>
         <h1 className='text-center'>Peyton Manning visits on Wikipedia</h1>
 
@@ -131,12 +186,31 @@ function App() {
             <Line ref={chartRef} options={chartOpts} data={chartData} />
           </Col>
         </Row>
-        <Row className=''>
+        <Row>
           <Col md={6}>
             <Button className='w-100' onClick={() => makeForecast(Data.stripeData, chartRef)}>Forecast Data</Button>
           </Col>
           <Col md={6}>
             <Button variant='warning' className='w-100' onClick={() => detectAnomalies(Data.stripeData, chartRef)}>Detect Anomalies</Button>
+          </Col>
+        </Row>
+        <Row className='mt-3'>
+          <Col md={12}>
+            <h1 className='text-center mb-3'>Let's add Nixtla Forecasting and Anomaly detection to your charts</h1>
+            <ol>
+              <li>Get your Nixtla auth token <a target={'_blank'} href='http://18.235.133.135:3000/login'>here!</a></li>
+              <li>Create forecast and anomaly detecton requests functions</li>
+              <div className='pre-scrollable'>
+                <p className='mt-1'>The code assumes that your data object contains <code>data.timestamp</code> and <code>data.value</code> as properties</p>
+                <p className='mt-1 mb-0'>You will also need to adjust the following params: fh, seasonality, model, cv, and level. You can find the documentation for this params here:</p>
+                <p className='mb-0'><a target={'_blank'} href='https://docs.nixtla.io/reference/forecast_forecast_post'>Forecast</a></p>
+                <p><a target={'_blank'} href='https://docs.nixtla.io/reference/anomaly_detector_anomaly_detector_post'>Anomaly detection</a></p>
+                <pre dangerouslySetInnerHTML={{ __html: nixtlaHttpCodeSnippet }}></pre>
+              </div>
+              <li>Call the functions with your data</li>
+              <li>Add data to your chart</li>
+              <li>Update your chart</li>
+            </ol>
           </Col>
         </Row>
       </Container>
