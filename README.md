@@ -10,7 +10,8 @@ We are going to use the following dataset:
 This is the plotted data before using Nixtla.
 ![Peyton before](/peyton-before.png)
 
-And this is the updated chart with Forecasting (blue) and anomalies detected (yellow dots).
+**And this is the updated chart with Forecasting (blue) and anomalies detected (yellow dots).**
+
 ![Peyton after](/peyton-after.png)
 
 ## Integrating Nixtla with your application
