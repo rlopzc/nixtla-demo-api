@@ -4,6 +4,15 @@
 
 We will use Nixtla to forecast and detect anomalies in our dataset.
 
+We are going to use the following dataset:
+[Peyton Manning wikipedia visits dataset](/manning.json).
+
+This is the plotted data before using Nixtla.
+![Peyton before](/peyton-before.png)
+
+And this is the updated chart with Forecasting (blue) and anomalies detected (yellow dots).
+![Peyton after](/peyton-after.png)
+
 ## Integrating Nixtla with your application
 
 ### Nixtla Auth token
@@ -126,7 +135,7 @@ Now we need to add the following events to some buttons.
 
 You can also see the code in `/src/App.js` and follow the tutorial.
 
-Happy coding and shoot me an email if you have any question!
+Happy coding and open an issue if you have any question!
 
 ## Available Scripts
 
