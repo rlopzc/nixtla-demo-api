@@ -11,7 +11,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { forecast } from './nixtla';
+import { forecast, anomalyDetection } from './nixtla';
 import * as Utils from './utils';
 import * as Data from './data';
 import { useRef } from 'react';
@@ -31,7 +31,7 @@ function Nav() {
     <Navbar bg="dark" variant="dark">
       <Container>
         <Navbar.Brand href="#home">
-          Hooky
+          Wikipedia Visits
         </Navbar.Brand>
       </Container>
     </Navbar>
@@ -65,9 +65,11 @@ const chartData = {
       data: Data.stripeData.value,
       borderColor: 'rgb(255, 99, 132)',
       backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      pointRadius: [],
+      pointBackgroundColor: 'yellow',
       elements: {
-        point:{
-            radius: 0
+        point: {
+          radius: 0
         }
       },
       segment: {
@@ -93,11 +95,26 @@ const makeForecast = async (data, chartRef) => {
   const parsedData = Data.parseNixtlaData(fcast);
 
   const chart = chartRef.current;
-  chart.data.labels = [ ...data.timestamp, ...parsedData.timestamp ]
-  chart.data.datasets[0].data = [ ...chart.data.datasets[0].data, ...parsedData.value ];
+  chart.data.labels = [...data.timestamp, ...parsedData.timestamp]
+  chart.data.datasets[0].data = [...chart.data.datasets[0].data, ...parsedData.value];
 
   chart.update();
 };
+
+const detectAnomalies = async (data, chartRef) => {
+  const anomalies = await anomalyDetection(data);
+  const parsedData = Data.parseNixtlaData(anomalies);
+
+  // Search data by value. update it's point radius
+  const chart = chartRef.current;
+  const dataset = chart.data.datasets[0];
+
+  parsedData.value
+    .map(value => dataset.data.indexOf(value))
+    .forEach(idx => dataset.pointRadius[idx] = 5);
+
+  chart.update();
+}
 
 function App() {
   const chartRef = useRef();
@@ -108,16 +125,18 @@ function App() {
       <Container>
         <h1 className='text-center'>Peyton Manning visits on Wikipedia</h1>
 
-        <Row className='mt-3'>
+        <Row className='mt-1'>
           <Col md={12}>
-            <h2 className='text-center'>Forecasting</h2>
+            <h2 className='text-center'>Forecasting and Anomaly Detection</h2>
             <Line ref={chartRef} options={chartOpts} data={chartData} />
-            <Button className='mt-2 w-100' onClick={() => makeForecast(Data.stripeData, chartRef)}>Forecast Data</Button>
           </Col>
         </Row>
-        <Row className='mt-3'>
-          <Col md={12}>
-            <h2 className='text-center'>Anomaly Detection</h2>
+        <Row className=''>
+          <Col md={6}>
+            <Button className='w-100' onClick={() => makeForecast(Data.stripeData, chartRef)}>Forecast Data</Button>
+          </Col>
+          <Col md={6}>
+            <Button variant='warning' className='w-100' onClick={() => detectAnomalies(Data.stripeData, chartRef)}>Detect Anomalies</Button>
           </Col>
         </Row>
       </Container>
