@@ -12,9 +12,11 @@ All nixtla requests need a bearer token which can be obtained [here](http://18.2
 
 ### Nixtla Forecasting and Anomaly Detection API functions
 
-The code assumes that your data object contains `data.timestamp` and `data.value` as properties.
-You will also need to adjust the following params: `fh, seasonality, model, cv, and level`. You can find the documentation for this params here:
-[Forecast](https://docs.nixtla.io/reference/forecast_forecast_post)
+The following code are the requests that we are going to use in our project.
+
+This code assumes that your data object contains `data.timestamp` and `data.value` as properties.
+You will also need to adjust the following params: `fh, seasonality, model, cv, and level`. You can find the documentation for this params here:  
+[Forecast](https://docs.nixtla.io/reference/forecast_forecast_post)  
 [Anomaly Detection](https://docs.nixtla.io/reference/anomaly_detector_anomaly_detector_post)
 
 ```js
@@ -76,7 +78,55 @@ export {
 
 ### Using Nixtla API functions
 
-### Add Nixtla data to your chart
+Let's use the previously defined functions in our code.
+
+We will create two functions that call Nixtla API.
+We add the response values to our Chart and update it.
+
+```js
+const makeForecast = async (data, chartRef) => {
+  const fcast = await forecast(data);
+  const parsedData = parseNixtlaData(fcast);
+
+  const chart = chartRef.current;
+  chart.data.labels = [...data.timestamp, ...parsedData.timestamp]
+  chart.data.datasets[0].data = [...chart.data.datasets[0].data, ...parsedData.value];
+
+  chart.update();
+};
+
+const detectAnomalies = async (data, chartRef) => {
+  const anomalies = await anomalyDetection(data);
+  const parsedData = parseNixtlaData(anomalies);
+
+  // Search data by value. update it's point radius
+  const chart = chartRef.current;
+  const dataset = chart.data.datasets[0];
+
+  parsedData.value
+    .map(value => dataset.data.indexOf(value))
+    .forEach(idx => dataset.pointRadius[idx] = 5);
+
+  chart.update();
+}
+```
+
+Now we need to add the following events to some buttons.
+
+```js
+<Row>
+  <Col md={6}>
+    <Button className='w-100' onClick={() => makeForecast(Data.manningData, chartRef)}>Forecast Data</Button>
+  </Col>
+  <Col md={6}>
+    <Button variant='warning' className='w-100' onClick={() => detectAnomalies(Data.manningData, chartRef)}>Detect Anomalies</Button>
+  </Col>
+</Row>
+```
+
+You can also see the code in `/src/App.js` and follow the tutorial.
+
+Happy coding and shoot me an email if you have any question!
 
 ## Available Scripts
 

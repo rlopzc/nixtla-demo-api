@@ -55,14 +55,14 @@ const dashLastLine = (ctx, size) => {
   }
 }
 
-const chartLabels = Utils.months({ count: Data.stripeData.timestamp.length });
+const chartLabels = Utils.months({ count: Data.manningData.timestamp.length });
 
 const chartData = {
   labels: chartLabels,
   datasets: [
     {
       label: 'Manning',
-      data: Data.stripeData.value,
+      data: Data.manningData.value,
       borderColor: 'rgb(255, 99, 132)',
       backgroundColor: 'rgba(255, 99, 132, 0.5)',
       pointRadius: [],
@@ -75,13 +75,13 @@ const chartData = {
       segment: {
         borderColor: ctx => {
           const idx = ctx.p0DataIndex;
-          if (idx >= Data.stripeData.timestamp.length) {
+          if (idx >= Data.manningData.timestamp.length) {
             return 'blue';
           }
         },
         borderDash: ctx => {
           const idx = ctx.p0DataIndex;
-          if (idx >= Data.stripeData.timestamp.length) {
+          if (idx >= Data.manningData.timestamp.length) {
             return [6];
           }
         },
@@ -90,9 +90,18 @@ const chartData = {
   ],
 };
 
+const parseNixtlaData = (nixtla) => {
+  const timestamp = nixtla['timestamp'].map(x => x.split(' ')[0]);
+
+  return {
+    timestamp: timestamp,
+    value: nixtla['value'],
+  };
+};
+
 const makeForecast = async (data, chartRef) => {
   const fcast = await forecast(data);
-  const parsedData = Data.parseNixtlaData(fcast);
+  const parsedData = parseNixtlaData(fcast);
 
   const chart = chartRef.current;
   chart.data.labels = [...data.timestamp, ...parsedData.timestamp]
@@ -103,7 +112,7 @@ const makeForecast = async (data, chartRef) => {
 
 const detectAnomalies = async (data, chartRef) => {
   const anomalies = await anomalyDetection(data);
-  const parsedData = Data.parseNixtlaData(anomalies);
+  const parsedData = parseNixtlaData(anomalies);
 
   // Search data by value. update it's point radius
   const chart = chartRef.current;
@@ -133,10 +142,10 @@ function App() {
         </Row>
         <Row>
           <Col md={6}>
-            <Button className='w-100' onClick={() => makeForecast(Data.stripeData, chartRef)}>Forecast Data</Button>
+            <Button className='w-100' onClick={() => makeForecast(Data.manningData, chartRef)}>Forecast Data</Button>
           </Col>
           <Col md={6}>
-            <Button variant='warning' className='w-100' onClick={() => detectAnomalies(Data.stripeData, chartRef)}>Detect Anomalies</Button>
+            <Button variant='warning' className='w-100' onClick={() => detectAnomalies(Data.manningData, chartRef)}>Detect Anomalies</Button>
           </Col>
         </Row>
       </Container>
