@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/nixtla-demo-api/static/css/main.c9543ada.css",
-    "main.js": "/nixtla-demo-api/static/js/main.a5e38d3b.js",
+    "main.js": "/nixtla-demo-api/static/js/main.9b4cd731.js",
     "static/js/787.50aefd38.chunk.js": "/nixtla-demo-api/static/js/787.50aefd38.chunk.js",
     "index.html": "/nixtla-demo-api/index.html",
     "main.c9543ada.css.map": "/nixtla-demo-api/static/css/main.c9543ada.css.map",
-    "main.a5e38d3b.js.map": "/nixtla-demo-api/static/js/main.a5e38d3b.js.map",
+    "main.9b4cd731.js.map": "/nixtla-demo-api/static/js/main.9b4cd731.js.map",
     "787.50aefd38.chunk.js.map": "/nixtla-demo-api/static/js/787.50aefd38.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.c9543ada.css",
-    "static/js/main.a5e38d3b.js"
+    "static/js/main.9b4cd731.js"
   ]
 }
